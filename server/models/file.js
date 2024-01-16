@@ -8,10 +8,13 @@ const fileSchema = new mongoose.Schema({
     },
     parentFolder:{
         type: mongoose.Schema.Types.ObjectId,
-        required:true,
         trim:true,
         ref: "Folder"
-    },  
+    },
+    url:{
+        type:String,
+        required:true,
+    },
 })
 
 module.exports = mongoose.model('File', fileSchema)

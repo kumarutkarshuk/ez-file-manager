@@ -21,6 +21,14 @@ const userSchema = new mongoose.Schema({
         required:true,
         trim:true
     },
+    folders:[{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Folder"
+    }],
+    files:[{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "File"
+    }],
         
 })
 

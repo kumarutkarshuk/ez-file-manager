@@ -17,7 +17,7 @@ exports.uploadOnCloudinary = async (localFilePath) => {
             folder: process.env.FOLDER_NAME
         })
         fs.unlinkSync(localFilePath)
-        return response.url;
+        return response;
 
     } catch (error) {
         console.log("Error message: ", error);
