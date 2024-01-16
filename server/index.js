@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 const cors = require('cors')
 const {connect} = require('./config/database')
-const userRoutes = require('./routes/user')
+const routes = require('./routes/route')
 require('dotenv').config()
 
 
@@ -16,12 +16,12 @@ app.use(cors({
 //database connection
 connect()
 
-//file upload middleware
+//file upload middleware -> doing in the frontend
 
-//cloudinary connection
+//cloudinary connection -> not using
 
 //mount routes
-app.use('/api/v1/auth', userRoutes)
+app.use('/api/v1', routes)
 
 app.listen(PORT, ()=>{
     console.log(`Server is running on port: ${PORT}`)

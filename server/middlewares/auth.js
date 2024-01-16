@@ -5,6 +5,7 @@ exports.auth = async(req, res, next) => {
     try{
         
         const token = req.body.token
+        // console.log(req.body);
         
         if(!token){
             return res.status(401).json({
