@@ -102,10 +102,13 @@ exports.deleteFolder = async (req, res)=>{
             parentFolderDetails = await Folder.findById(parentFolderDetails.parentFolder)
         }
         userDetails.save()
+
+        const {folders} = await User.findById(req.user.id).populate('folders').exec()
         
         return res.status(200).json({
             success:true,
             message:"Folder deletion successful",
+            folderArray:folders
         })
 
     }catch(error){
@@ -125,13 +128,15 @@ exports.renameFolder = async (req, res)=>{
         const {folderId, name} = req.body
 
         const folderDetails = await Folder.findById(folderId)
-
         folderDetails.name = name
         folderDetails.save()
+
+        const {folders} = await User.findById(req.user.id).populate('folders').exec()
         
         return res.status(200).json({
             success:true,
             message:"Folder rename successful",
+            folderArray: folders
         })
 
     }catch(error){

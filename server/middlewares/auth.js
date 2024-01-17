@@ -19,6 +19,7 @@ exports.auth = async(req, res, next) => {
             req.user = decode
 
          }catch(e){
+            console.log(e.message)
             return res.status(401).json({
                 success:false,
                 message:"error decoding token",

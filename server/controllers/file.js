@@ -72,9 +72,11 @@ exports.deleteFile = async (req, res)=>{
             parentFolderDetails = await Folder.findById(parentFolderDetails.parentFolder)
         }
         
+        const {files} = await User.findById(req.user.id).populate('files').exec()
         return res.status(200).json({
             success:true,
             message:"File deletion successful",
+            fileArray:files
         })
 
     }catch(error){
@@ -97,15 +99,17 @@ exports.renameFile = async (req, res)=>{
 
         fileDetails.name = name
         fileDetails.save()
+
+        const {files} = await User.findById(req.user.id).populate('files').exec()
         
         return res.status(200).json({
             success:true,
             message:"File rename successful",
+            fileArray: files
         })
 
     }catch(error){
-        console.log("Error: ", error)
-
+        console.log("Error: ", error.message)
         return res.status(500).json({
             success:false,
             message:"Error renaming file",
@@ -180,7 +184,7 @@ exports.getAllFiles = async (req, res)=>{
         return res.status(200).json({
             success:true,
             message:"Files fetched successfully",
-            filesArray: userDetails.files
+            fileArray: userDetails.files
         })
 
     }catch(error){
