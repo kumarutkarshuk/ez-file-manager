@@ -61,7 +61,7 @@ const Dashboard = () => {
       <p className='ml-8 mt-2'>
         Current Folder: <span className='font-semibold'>{`${currentFolderName}`}</span>
       </p>
-      <div className='flex gap-2 ml-8 mt-2'>
+      <div className='flex gap-2 ml-8 mt-2 flex-col lg:flex-row'>
         <div className='flex flex-col gap-2'>
           <p className='font-semibold'>Folders</p>
           {

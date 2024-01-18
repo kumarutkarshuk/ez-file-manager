@@ -1,7 +1,5 @@
 import React from 'react'
 import {useForm} from 'react-hook-form'
-import { useEffect } from 'react'
-import { useDispatch } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import { signup } from '../../services/operations/authAPI'
 import image from '../../assets/Portfolio.jpg'
@@ -23,7 +21,7 @@ const Signup = () => {
   }
   return (
     <div className='flex w-screen max-h-screen'>
-        <form className='flex flex-col w-[50%] pl-32 pt-20'
+        <form className='flex flex-col lg:w-[50%] lg:pl-32 lg:pt-20 p-4 w-full'
         onSubmit={handleSubmit(submitHandler)}>
             <h1 className='text-4xl text-[#29ADB2] -ml-1'>React File Manager</h1>
             <p className='flex gap-[2px] items-center text-xs'>Made with <span><FaHeart
@@ -35,12 +33,12 @@ const Signup = () => {
               Login</Link>
             </div>
 
-            <div className='w-fit mt-8 flex flex-col gap-2'>
-              <div className='flex gap-4'>
+            <div className='lg:w-fit mt-8 flex flex-col gap-2 w-full'>
+              <div className='flex gap-4 flex-col lg:flex-row'>
                 <div className='flex flex-col'>
                   <label>
                     <p className='font-semibold'>First Name</p>
-                    <input type="text" className='border-b-[1px] border-black outline-none mb-2'
+                    <input type="text" className='border-b-[1px] border-black outline-none mb-2 w-full'
                       {...register('firstName', {required:true})}
                     />
                     
@@ -51,7 +49,7 @@ const Signup = () => {
                 <div className='flex flex-col'>
                   <label>
                     <p className='font-semibold'>Last Name</p>
-                    <input type="text" className='border-b-[1px] border-black outline-none mb-2'
+                    <input type="text" className='border-b-[1px] border-black outline-none mb-2 w-full'
                       {...register('lastName', {required:true})}
                     />
                     
@@ -95,11 +93,9 @@ const Signup = () => {
               </div>
               
             </div>
-
-            
         </form>
         
-        <img src={image} className='w-[50%]'/>
+        <img src={image} className='w-[50%] lg:block hidden'/>
         
 
     </div>

@@ -28,7 +28,7 @@ const Login = () => {
   else{
     return (
       <div className='flex w-screen max-h-screen'>
-          <form className='flex flex-col w-[50%] pl-32 pt-20'
+          <form className='flex flex-col lg:w-[50%] lg:pl-32 lg:pt-20 p-4 w-full'
           onSubmit={handleSubmit(submitHandler)}>
               <h1 className='text-4xl text-[#29ADB2] -ml-1'>React File Manager</h1>
               <p className='flex gap-[2px] items-center text-xs'>Made with <span><FaHeart
@@ -40,7 +40,7 @@ const Login = () => {
                 Signup</Link>
               </div>
   
-              <div className='w-[75%] mt-8 flex flex-col gap-2'>
+              <div className='lg:w-[75%] mt-8 flex flex-col gap-2 w-full'>
   
               
                 <label>
@@ -73,7 +73,7 @@ const Login = () => {
               
           </form>
           
-          <img src={image} className='w-[50%]'/>
+          <img src={image} className='w-[50%] lg:block hidden'/>
           
   
       </div>

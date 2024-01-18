@@ -33,7 +33,7 @@ const NewFolderCard = () => {
             <p>Create New Folder</p>
         </div>
       </button>
-      <div className={`flex justify-between ${clicked ? 'block' : 'hidden'}`}>
+      <div className={`flex justify-between ${clicked ? 'block' : 'hidden'} w-[300px]`}>
             <input type="text" className='border w-full outline-none px-2' 
             placeholder='Enter new folder name'
             onChange={(e) => setNewName(e.target.value)}

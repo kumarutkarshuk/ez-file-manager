@@ -37,7 +37,7 @@ const UploadFileCard = () => {
         </div>
       </button>
 
-      <div className={`flex ${clicked ? 'block' : 'hidden'} relative items-center`}>
+      <div className={`flex ${clicked ? 'block' : 'hidden'} relative items-center w-[300px]`}>
         <input type="file" onChange={(e) => setFile(e.target.files[0])}/>
         <div className='flex text-xl right-[-3px] absolute'>
               <button onClick={()=>{setClicked(false)}}><FcCancel /></button>

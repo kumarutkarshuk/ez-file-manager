@@ -15,7 +15,7 @@ const FileCard = ({name, url, fileId}) => {
   const [renameClicked, setRenameClicked] = useState(false)
   const [moveClicked, setMoveClicked] = useState(false)
   const [newName, setNewName] = useState("")
-  const [option, setOption] = useState("")
+  const [option, setOption] = useState(null)
   const dispatch = useDispatch()
   const {token} = useSelector(state => state.auth)
   
@@ -36,9 +36,12 @@ const FileCard = ({name, url, fileId}) => {
   const handleMove = () => {
     // console.log(option);
     if(!option){
-      setOption(folderArray[0]._id)
+      moveFile(dispatch, {token, parentFolderId: folderArray[0]._id, fileId})
     }
-    moveFile(dispatch, {token, parentFolderId: option, fileId})
+    else{
+      moveFile(dispatch, {token, parentFolderId: option, fileId})
+    }
+      
   }
 
   return (
@@ -60,7 +63,7 @@ const FileCard = ({name, url, fileId}) => {
         </div>
 
         {/* rename */}
-        <div className={`flex justify-between ${renameClicked? 'block' : 'hidden'}`}>
+        <div className={`flex justify-between ${renameClicked? 'block' : 'hidden'} w-[300px]`}>
           <input type="text" className='border w-full outline-none px-2'
             onChange={(e) => setNewName(e.target.value)} placeholder='Enter new file name'
           />
@@ -76,7 +79,7 @@ const FileCard = ({name, url, fileId}) => {
         </div>
         
         {/* move */}
-        <div className={`flex justify-between ${moveClicked? 'block' : 'hidden'}`}>
+        <div className={`flex justify-between ${moveClicked? 'block' : 'hidden'} w-[300px]`}>
           <select className='w-full px-2' onChange={(e) => setOption(e.target.value)}>
             {
               folderArray.map((element) => (
