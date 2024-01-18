@@ -8,10 +8,7 @@ require('dotenv').config()
 
 const PORT = process.env.PORT
 app.use(express.json())
-app.use(cors({
-    origin:"https://ez-file-manager.vercel.app/",
-    credentials:true
-}))
+app.use(cors())
 
 //database connection
 connect()
