@@ -116,7 +116,7 @@ export async function uploadFile(dispatch, data){
     toast.dismiss(toastId)
     toast.success(response.data.message)
   }catch(error){
-    // console.log("Error logging-in due to: ", error.message)
+    // console.log("Error uploading file due to: ", error.message)
     toast.dismiss(toastId)
     toast.error(error.response.data.message)
   }
