@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
     folderArray:[],
     fileArray:[],
+    currentFolder: undefined
 }
 
 const dataSlice = createSlice({
@@ -15,10 +16,13 @@ const dataSlice = createSlice({
         setFileArray: (state, value) => {
             state.fileArray = value.payload
         },
+        setCurrentFolder: (state, value) => {
+            state.currentFolder = value.payload
+        },
         
     }
 })
 
-export const {setFolderArray, setFileArray} = dataSlice.actions
+export const {setFolderArray, setFileArray, setCurrentFolder} = dataSlice.actions
 export default dataSlice.reducer
 

@@ -2,7 +2,6 @@ const File = require('../models/file')
 const User = require('../models/user')
 const Folder = require('../models/folder')
 const { uploadOnCloudinary } = require("../utils/cloudinary")
-const folder = require('../models/folder')
 
 exports.uploadFile = async (req, res)=>{
     
@@ -10,8 +9,14 @@ exports.uploadFile = async (req, res)=>{
         const {name, parentFolder} = req.body
         // console.log("File object: ", req.file);
         const response = await uploadOnCloudinary(req.file.path)
-
-        const fileDetails = await File.create({name, parentFolder, url: response.url})
+        let fileDetails
+        if(parentFolder !== 'undefined'){
+            fileDetails = await File.create({name, parentFolder, url: response.url})
+        }
+        else{
+            fileDetails = await File.create({name, url: response.url})
+        }
+        
         const userDetails = await User.findById(req.user.id)
         const fileId = fileDetails._id
         // console.log(userDetails);
@@ -20,17 +25,23 @@ exports.uploadFile = async (req, res)=>{
 
         //challenging code
 
-        let parentFolderDetails = await Folder.findById(parentFolder)
-        while(parentFolderDetails !== null){
-            parentFolderDetails.files.push(fileId)
-            parentFolderDetails.save()
-            parentFolderDetails = await Folder.findById(parentFolderDetails.parentFolder)
+        //add in the parent folders
+        if(parentFolder !== "undefined"){
+            let parentFolderDetails = await Folder.findById(parentFolder)
+            while(parentFolderDetails !== null){
+                parentFolderDetails.files.push(fileId)
+                parentFolderDetails.save()
+                parentFolderDetails = await Folder.findById(parentFolderDetails.parentFolder)
+            }
         }
+
+        const {files} = await User.findById(req.user.id).populate('files').exec()
         
         return res.status(200).json({
             success:true,
             message:"File upload successful",
-            fileDetails
+            fileDetails,
+            fileArray: files
         })
 
     }catch(error){
@@ -126,41 +137,71 @@ exports.moveFile = async (req, res)=>{
         const fileDetails = await File.findById(fileId)
 
         const oldFolderDetails = await Folder.findById(fileDetails.parentFolder)
-        const index = oldFolderDetails.files.indexOf(fileId)
-        oldFolderDetails.files.splice(index, 1)
-        oldFolderDetails.save()
-        fileDetails.parentFolder = parentFolderId
-        fileDetails.save()
         
-        //folder in which the file is
-        const folderDetails = await Folder.findById(parentFolderId)
-
-        
-        //it should not be present in the folders down the tree
-        folderDetails.folders.forEach(async (element)=>{
-            const folderDetails = await Folder.findById(element)
-            const index = folderDetails.folders.indexOf(fileId)
-            if(index !== -1){
-                folderDetails.folders.splice(index, 1)
-                folderDetails.save()
-            }
-        })
-
-        //it should be present in the folders up the tree
-        let parentFolderDetails = await Folder.findById(parentFolderId)
-        while(parentFolderDetails !== null){
-            const index = parentFolderDetails.files.indexOf(fileId)
-            if(index === -1){
-                parentFolderDetails.files.push(fileId)
-                parentFolderDetails.save()
-            }
-            
-            parentFolderDetails = await Folder.findById(parentFolderDetails.parentFolder)
+        //root folder will not have files array
+        if(oldFolderDetails){
+            const index = oldFolderDetails.files.indexOf(fileId)
+            oldFolderDetails.files.splice(index, 1)
+            oldFolderDetails.save()
         }
+        
+        if(parentFolderId === 'root'){
+            //delete fileDetails.parentFolder did not work
+            fileDetails.parentFolder = undefined
+            fileDetails.save()
+        }
+        else{
+            fileDetails.parentFolder = parentFolderId
+            fileDetails.save()
+        }
+        
+        
+        if(parentFolderId !== 'root'){
+            //folder in which the file is
+            let folderDetails = await Folder.findById(parentFolderId)
+            
+            //it should not be present in the folders down the tree
+            folderDetails.folders.forEach(async (element)=>{
+                const folderDetails = await Folder.findById(element)
+                const index = folderDetails.folders.indexOf(fileId)
+                if(index !== -1){
+                    folderDetails.folders.splice(index, 1)
+                    folderDetails.save()
+                }
+            })
+
+            //it should be present in the folders up the tree
+            let parentFolderDetails = await Folder.findById(parentFolderId)
+            while(parentFolderDetails !== null){
+                const index = parentFolderDetails.files.indexOf(fileId)
+                if(index === -1){
+                    parentFolderDetails.files.push(fileId)
+                    parentFolderDetails.save()
+                }
+                
+                parentFolderDetails = await Folder.findById(parentFolderDetails.parentFolder)
+            }
+        }
+
+        else{
+            //only remove from folders down the tree
+            const {folders} = await User.findById(req.user.id).populate('folders').exec()
+            folders.forEach(async (element)=>{
+                const folderDetails = await Folder.findById(element)
+                const index = folderDetails.folders.indexOf(fileId)
+                if(index !== -1){
+                    folderDetails.folders.splice(index, 1)
+                    folderDetails.save()
+                }
+            })
+        }
+        
+        const {files} = await User.findById(req.user.id).populate('files').exec()
 
         return res.status(200).json({
             success:true,
             message:"File moved successfully",
+            fileArray: files
         })
 
     }catch(error){

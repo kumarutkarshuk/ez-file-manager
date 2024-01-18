@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import { signup } from '../../services/operations/authAPI'
 import image from '../../assets/Portfolio.jpg'
+import { FaHeart } from "react-icons/fa";
 const Signup = () => {
 
   const {
@@ -24,8 +25,10 @@ const Signup = () => {
     <div className='flex w-screen max-h-screen'>
         <form className='flex flex-col w-[50%] pl-32 pt-20'
         onSubmit={handleSubmit(submitHandler)}>
-            <h1 className='text-4xl text-[#29ADB2]'>React File Manager</h1>
-
+            <h1 className='text-4xl text-[#29ADB2] -ml-1'>React File Manager</h1>
+            <p className='flex gap-[2px] items-center text-xs'>Made with <span><FaHeart
+              className='text-pink-500'
+            /></span> by Utkarsh Kumar</p>
             <div className='flex mt-2 gap-2'>
               <p>Already a user?</p>
               <Link to='/login' className='underline text-[#0766AD] hover:text-[#29ADB2] duration-200'>

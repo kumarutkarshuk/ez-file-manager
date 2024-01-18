@@ -10,6 +10,7 @@ import toast from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
 import { renameFolder } from '../../services/operations/dataAPI';
 import { deleteFolder } from '../../services/operations/dataAPI';
+import { setCurrentFolder } from '../../slices/dataSlice';
 
 const FolderCard = ({name, folderId}) => {
   const [clicked, setClicked] = useState(false)
@@ -37,7 +38,11 @@ const FolderCard = ({name, folderId}) => {
         </div>
         
         <div className='flex items-center text-xl gap-4'>
-            <FaRegFolderOpen />
+            <button onClick={()=>{
+              dispatch(setCurrentFolder(folderId))
+            }}>
+              <FaRegFolderOpen />
+            </button>
             <button onClick={()=>{setClicked(true)}}><MdDriveFileRenameOutline /></button>
             <button onClick={handleDelete}><MdDelete/></button>
         </div>
@@ -53,7 +58,7 @@ const FolderCard = ({name, folderId}) => {
             <button onClick={handleRename}><MdCheck className='text-[#00FF00]'/></button>
             
           </div>
-        </div>
+      </div>
     </div>
     
   )

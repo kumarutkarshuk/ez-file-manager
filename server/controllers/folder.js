@@ -20,11 +20,14 @@ exports.createFolder = async (req, res)=>{
             parentFolderDetails.save()
             parentFolderDetails = await Folder.findById(parentFolderDetails.parentFolder)
         }
+
+        const {folders} = await User.findById(req.user.id).populate('folders').exec()
         
         return res.status(200).json({
             success:true,
             message:"Folder creation successful",
-            folderDetails
+            folderDetails,
+            folderArray: folders
         })
 
     }catch(error){

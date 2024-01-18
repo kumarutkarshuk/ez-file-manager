@@ -7,14 +7,18 @@ import { MdOutlineDriveFileMove } from "react-icons/md";
 import { FcCancel } from "react-icons/fc";
 import { MdCheck } from "react-icons/md";
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteFile, renameFile } from '../../services/operations/dataAPI';
+import { deleteFile, moveFile, renameFile } from '../../services/operations/dataAPI';
 import toast from 'react-hot-toast';
 
 const FileCard = ({name, url, fileId}) => {
-  const [clicked, setClicked] = useState(false)
+  const {folderArray} = useSelector(state => state.data)
+  const [renameClicked, setRenameClicked] = useState(false)
+  const [moveClicked, setMoveClicked] = useState(false)
   const [newName, setNewName] = useState("")
+  const [option, setOption] = useState("")
   const dispatch = useDispatch()
-  const {token} = useSelector(state => state.auth) 
+  const {token} = useSelector(state => state.auth)
+  
 
   const handleRename = () => {
     if(newName === ""){
@@ -22,12 +26,21 @@ const FileCard = ({name, url, fileId}) => {
     }
     else{
       renameFile(dispatch, {token, name: newName, fileId})
-      setClicked(false)
+      setRenameClicked(false)
     }
   }
   const handleDelete = () => {
     deleteFile(dispatch, {token, fileId})
   }
+
+  const handleMove = () => {
+    // console.log(option);
+    if(!option){
+      setOption(folderArray[0]._id)
+    }
+    moveFile(dispatch, {token, parentFolderId: option, fileId})
+  }
+
   return (
     <div className='flex flex-col'>
         <div className='flex border rounded-md w-[300px] justify-between p-2'>
@@ -39,23 +52,46 @@ const FileCard = ({name, url, fileId}) => {
           
           <div className='flex items-center text-xl gap-4'>
               <a href={url} target='_blank'><MdFileOpen/></a>
-              <button onClick={()=>{setClicked(true)}}><MdDriveFileRenameOutline /></button>
-              <MdOutlineDriveFileMove />
+              <button onClick={()=>{setRenameClicked(true)}}><MdDriveFileRenameOutline /></button>
+              <button onClick={()=>{setMoveClicked(true)}}><MdOutlineDriveFileMove /></button>
               <button onClick={handleDelete}><MdDelete/></button>
               
           </div>
         </div>
-        <div className={`flex justify-between ${clicked ? 'block' : 'hidden'}`}>
+
+        {/* rename */}
+        <div className={`flex justify-between ${renameClicked? 'block' : 'hidden'}`}>
           <input type="text" className='border w-full outline-none px-2'
             onChange={(e) => setNewName(e.target.value)} placeholder='Enter new file name'
           />
           <div className='flex text-xl'>
             <button onClick={()=>{
-              setClicked(false)
+              setRenameClicked(false)
               }}>
                 <FcCancel />
               </button>
             <button onClick={handleRename}><MdCheck className='text-[#00FF00]'/></button>
+            
+          </div>
+        </div>
+        
+        {/* move */}
+        <div className={`flex justify-between ${moveClicked? 'block' : 'hidden'}`}>
+          <select className='w-full px-2' onChange={(e) => setOption(e.target.value)}>
+            {
+              folderArray.map((element) => (
+                <option value={element._id} key={element._id}>{element.name}</option>
+              ))
+            }
+            <option>root</option>
+          </select>
+          <div className='flex text-xl'>
+            <button onClick={()=>{
+              setMoveClicked(false)
+              }}>
+                <FcCancel />
+              </button>
+            <button onClick={handleMove}><MdCheck className='text-[#00FF00]'/></button>
             
           </div>
         </div>

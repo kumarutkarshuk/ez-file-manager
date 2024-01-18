@@ -9,4 +9,7 @@ export const endpoints = {
     DELETE_FILE_API: BASE_URL + "/delete-file",
     RENAME_FOLDER_API: BASE_URL + "/rename-folder",
     DELETE_FOLDER_API: BASE_URL + "/delete-folder",
+    CREATE_FOLDER_API: BASE_URL + "/create-folder",
+    UPLOAD_FILE_API: BASE_URL + "/upload-file",
+    MOVE_FILE_API: BASE_URL + "/move-file",
 }

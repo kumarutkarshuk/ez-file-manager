@@ -7,15 +7,41 @@ import FolderCard from './FolderCard'
 import FileCard from './FileCard'
 import { FaCaretLeft } from "react-icons/fa";
 import UploadFileCard from './UploadFileCard'
-import UploadFolderCard from './UploadFolderCard'
+import NewFolderCard from './NewFolderCard'
+import { setCurrentFolder } from '../../slices/dataSlice'
 
 const Dashboard = () => {
 
   const {folderArray, fileArray} = useSelector(state => state.data)
   const {token} = useSelector(state => state.auth)
-  // console.log(folderArray);
-  // console.log(fileArray);
   const dispatch = useDispatch()
+  const {currentFolder} = useSelector(state => state.data)
+
+  let currentFolderName
+  if(currentFolder === undefined){
+    currentFolderName = "root"
+  }
+  else{
+    //find current folder's name
+    for(let i=0; i<folderArray.length; i++){
+      if(folderArray[i]._id === currentFolder){
+        currentFolderName = folderArray[i].name
+        break
+      }
+    }
+  }
+
+  const handleBack = () => {
+    let parentFolder
+    for(let i=0; i<folderArray.length; i++){
+      if(folderArray[i]._id === currentFolder){
+        parentFolder = folderArray[i].parentFolder
+        break
+      }
+    }
+    dispatch(setCurrentFolder(parentFolder))
+  }
+
 
   useEffect(()=>{
     getAllFilesAndFolders(dispatch, token)
@@ -25,32 +51,39 @@ const Dashboard = () => {
   return (
     <div className='flex flex-col'>
       <Navbar/>
-      <button className='ml-4 mt-4'>
+      <button className={`ml-4 mt-4 ${currentFolder === undefined ? 'text-white pointer-events-none' : 'block'}`}
+      onClick={handleBack}>
         <div className='flex items-center'>
         <FaCaretLeft />
         <p>Back</p>
         </div>
       </button>
       <p className='ml-8 mt-2'>
-        Current Folder: <span className='font-semibold'>root</span>
+        Current Folder: <span className='font-semibold'>{`${currentFolderName}`}</span>
       </p>
       <div className='flex gap-2 ml-8 mt-2'>
         <div className='flex flex-col gap-2'>
           <p className='font-semibold'>Folders</p>
           {
-            folderArray.map((element)=>(
-              <FolderCard name={element.name} key={element._id} folderId={element._id}/>
-            ))
+            folderArray.map((element)=>{
+              if(currentFolder === element.parentFolder){
+                return <FolderCard name={element.name} key={element._id} folderId={element._id}/>
+              }
+              
+          })
           }
-          <UploadFolderCard></UploadFolderCard>
+          <NewFolderCard></NewFolderCard>
         </div>
 
         <div className='flex flex-col gap-2'>
           <p className='font-semibold'>Files</p>
           {
-            fileArray.map((element)=>(
-              <FileCard name={element.name} url={element.url} key={element._id} fileId={element._id}/>
-            ))
+            fileArray.map((element)=>{
+              if(currentFolder === element.parentFolder){
+                return <FileCard name={element.name} url={element.url} key={element._id} fileId={element._id}/>
+              }
+              
+          })
           }
           <UploadFileCard></UploadFileCard>
         </div>

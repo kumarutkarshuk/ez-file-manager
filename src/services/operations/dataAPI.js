@@ -10,6 +10,9 @@ RENAME_FILE_API,
 DELETE_FILE_API,
 DELETE_FOLDER_API,
 RENAME_FOLDER_API,
+CREATE_FOLDER_API,
+UPLOAD_FILE_API,
+MOVE_FILE_API
 } = endpoints
 
 export async function getAllFilesAndFolders(dispatch, token){
@@ -80,6 +83,51 @@ export async function deleteFolder(dispatch, data){
     // console.log(data);
     const response = await apiConnector('DELETE', DELETE_FOLDER_API, data)
     dispatch(setFolderArray(response.data.folderArray))
+    toast.dismiss(toastId)
+    toast.success(response.data.message)
+  }catch(error){
+    // console.log("Error logging-in due to: ", error.message)
+    toast.dismiss(toastId)
+    toast.error(error.response.data.message)
+  }
+}
+
+export async function createFolder(dispatch, data){
+  const toastId = toast.loading('Loading...')
+  try{
+    // console.log(data);
+    const response = await apiConnector('POST', CREATE_FOLDER_API, data)
+    dispatch(setFolderArray(response.data.folderArray))
+    toast.dismiss(toastId)
+    toast.success(response.data.message)
+  }catch(error){
+    // console.log("Error logging-in due to: ", error.message)
+    toast.dismiss(toastId)
+    toast.error(error.response.data.message)
+  }
+}
+
+export async function uploadFile(dispatch, data){
+  const toastId = toast.loading('Loading...')
+  try{
+    // console.log(data);
+    const response = await apiConnector('POST', UPLOAD_FILE_API, data)
+    dispatch(setFileArray(response.data.fileArray))
+    toast.dismiss(toastId)
+    toast.success(response.data.message)
+  }catch(error){
+    // console.log("Error logging-in due to: ", error.message)
+    toast.dismiss(toastId)
+    toast.error(error.response.data.message)
+  }
+}
+
+export async function moveFile(dispatch, data){
+  const toastId = toast.loading('Loading...')
+  try{
+    // console.log(data);
+    const response = await apiConnector('POST', MOVE_FILE_API, data)
+    dispatch(setFileArray(response.data.fileArray))
     toast.dismiss(toastId)
     toast.success(response.data.message)
   }catch(error){
