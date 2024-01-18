@@ -18,6 +18,13 @@ const FileCard = ({name, url, fileId}) => {
   const [option, setOption] = useState(null)
   const dispatch = useDispatch()
   const {token} = useSelector(state => state.auth)
+  let displayName
+  if(name.length > 10){
+    displayName = name.substring(0,10) + "..."
+  }
+  else{
+    displayName = name
+  }
   
 
   const handleRename = () => {
@@ -50,7 +57,7 @@ const FileCard = ({name, url, fileId}) => {
 
           <div className='flex items-center gap-2'>
               <CiFileOn  className='text-4xl'/>
-              <p>{name}</p>
+              <p>{displayName}</p>
           </div>
           
           <div className='flex items-center text-xl gap-4'>
