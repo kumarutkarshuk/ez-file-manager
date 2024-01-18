@@ -30,7 +30,7 @@ const Login = () => {
       <div className='flex w-screen max-h-screen'>
           <form className='flex flex-col lg:w-[50%] lg:pl-32 lg:pt-20 p-4 w-full'
           onSubmit={handleSubmit(submitHandler)}>
-              <h1 className='text-4xl text-[#29ADB2] -ml-1'>React File Manager</h1>
+              <h1 className='text-4xl text-[#29ADB2] -ml-1'>EZ File Manager</h1>
               <p className='flex gap-[2px] items-center text-xs'>Made with <span><FaHeart
                 className='text-pink-500'
               /></span> by Utkarsh Kumar</p>
