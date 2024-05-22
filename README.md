@@ -13,3 +13,9 @@ Installation:
 To start the app:
 
 `npm run dev`
+
+## Testing Credentials
+
+Username: `test@ezfilemanager`
+
+Password: `test`
