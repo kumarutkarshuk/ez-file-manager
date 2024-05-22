@@ -1,3 +1,7 @@
+## Project Status
+
+This project is currently deployed. Link to demo: https://ez-file-manager.vercel.app/
+
 ## Setup Instructions
 
 Clone this repository. You will need `node` installed globally on your machine.
